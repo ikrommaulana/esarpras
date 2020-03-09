@@ -1,0 +1,30 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+
+ERROR - 2019-12-03 05:27:19 --> Severity: Notice --> Undefined index: jenis_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_list.php 50
+ERROR - 2019-12-03 05:27:19 --> Severity: Notice --> Undefined index: harga_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_list.php 51
+ERROR - 2019-12-03 10:07:19 --> Severity: Notice --> Undefined index: jenis_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_list.php 50
+ERROR - 2019-12-03 10:07:19 --> Severity: Notice --> Undefined index: harga_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_list.php 51
+ERROR - 2019-12-03 10:16:26 --> Severity: Notice --> Undefined index: jenis_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_list.php 50
+ERROR - 2019-12-03 10:16:26 --> Severity: Notice --> Undefined index: harga_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_list.php 51
+ERROR - 2019-12-03 10:16:27 --> Severity: Notice --> Undefined index: jenis_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_edit.php 77
+ERROR - 2019-12-03 10:16:27 --> Severity: Notice --> Undefined index: harga_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_edit.php 83
+ERROR - 2019-12-03 10:16:46 --> Severity: Notice --> Undefined index: jenis_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_list.php 50
+ERROR - 2019-12-03 10:16:46 --> Severity: Notice --> Undefined index: harga_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_list.php 51
+ERROR - 2019-12-03 10:16:48 --> Severity: Notice --> Undefined index: jenis_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_edit.php 77
+ERROR - 2019-12-03 10:16:48 --> Severity: Notice --> Undefined index: harga_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_edit.php 83
+ERROR - 2019-12-03 10:17:13 --> Severity: Notice --> Undefined index: jenis_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_edit.php 77
+ERROR - 2019-12-03 10:17:13 --> Severity: Notice --> Undefined index: harga_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_edit.php 83
+ERROR - 2019-12-03 10:17:21 --> Severity: Notice --> Undefined index: jenis_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_list.php 50
+ERROR - 2019-12-03 10:17:21 --> Severity: Notice --> Undefined index: harga_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_list.php 51
+ERROR - 2019-12-03 10:17:23 --> Severity: Notice --> Undefined index: jenis_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_edit.php 77
+ERROR - 2019-12-03 10:17:23 --> Severity: Notice --> Undefined index: harga_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_edit.php 83
+ERROR - 2019-12-03 10:19:24 --> Severity: Notice --> Undefined index: jenis_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_list.php 50
+ERROR - 2019-12-03 10:19:24 --> Severity: Notice --> Undefined index: harga_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_list.php 51
+ERROR - 2019-12-03 10:19:26 --> Severity: Notice --> Undefined index: jenis_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_edit.php 77
+ERROR - 2019-12-03 10:19:26 --> Severity: Notice --> Undefined index: harga_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_edit.php 83
+ERROR - 2019-12-03 10:19:29 --> Severity: Notice --> Undefined index: jenis_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_list.php 50
+ERROR - 2019-12-03 10:19:29 --> Severity: Notice --> Undefined index: harga_layanan C:\xampp\htdocs\esarpras\application\views\admin\mitra\mitra_list.php 51
+ERROR - 2019-12-03 10:26:06 --> Severity: Notice --> Undefined index: id_lab C:\xampp\htdocs\esarpras\application\views\admin\pegawai\pegawai_edit.php 84
+ERROR - 2019-12-03 10:26:31 --> Severity: Notice --> Undefined index: id_lab C:\xampp\htdocs\esarpras\application\views\admin\pegawai\pegawai_edit.php 84
+ERROR - 2019-12-03 10:29:02 --> Severity: Notice --> Undefined variable: id_mitra C:\xampp\htdocs\esarpras\application\controllers\admin\Kontrak.php 129
+ERROR - 2019-12-03 10:29:25 --> Severity: Notice --> Undefined variable: id_mitra C:\xampp\htdocs\esarpras\application\controllers\admin\Kontrak.php 129
