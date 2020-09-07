@@ -1,17 +1,26 @@
 <?php
+//$lanjasid = $data['lanjasid'];
 // $lay = $this->master_model->get_master('tb_layanan_lab_eks');
 // $sar = $this->master_model->get_master('tb_sarpras_lab');
+$lanjas = $this->master_model->get_master_by_id('tb_layanan_lab_eks','lanjasidpermohonan',$lanjasid);
+$daflayid = (isset($lanjas['daflayid']))? $lanjas['daflayid'] : set_value('daflayid');
+$layanan_lab = $this->db->query('select * from tb_layanan_lab where daflayid="'.$daflayid.'"')->result_array();
+$idlab = (isset($layanan_lab[0]['idlab']))? $layanan_lab[0]['idlab'] : set_value('idlab');
 
 if($this->session->userdata('admin_role')=='superadmin'){
-  $lay = $this->master_model->get_master('tb_layanan_lab_eks');
-  $sar = $this->master_model->get_master('tb_sarpras_lab');
+  // $lay = $this->master_model->get_simple_master('tb_layanan_lab_eks');
+  // $sar = $this->master_model->get_simple_master('tb_sarpras_lab');
+  $lay =  $this->master_model->get_simple_master_by_id('tb_layanan_lab','idlab',$idlab);
+  $sar =  $this->master_model->get_simple_master_by_id('tb_sarpras_lab','idlab',$idlab);
 }else{
-  $get_personil = $this->db->query('select * from m_personil
+  $get_personil = $this->db->query('select * from ci_admin
           where admin_id='.$this->session->userdata('admin_id'))->result();
   $priviledge = (isset($get_personil[0]->priviledge))? $get_personil[0]->priviledge : set_value('priviledge');
   if($priviledge==3){
-    $lay = $this->master_model->get_master('tb_layanan_lab_eks');
-    $sar = $this->master_model->get_master('tb_sarpras_lab');
+    // $lay = $this->master_model->get_simple_master('tb_layanan_lab_eks');
+    // $sar = $this->master_model->get_simple_master('tb_sarpras_lab');
+    $lay =  $this->master_model->get_simple_master_by_id('tb_layanan_lab','idlab',$idlab);
+    $sar =  $this->master_model->get_simple_master_by_id('tb_sarpras_lab','idlab',$idlab);
   }else{
     $pegnip = (isset($get_personil[0]->pegnip))? $get_personil[0]->pegnip : set_value('pegnip');
     $get_lab = $this->db->query('select * from tb_personil_daftar
@@ -21,6 +30,7 @@ if($this->session->userdata('admin_role')=='superadmin'){
     $sar =  $this->master_model->get_simple_master_by_id('tb_sarpras_lab','idlab',$idlab);
   }
 }
+//print_r($sar);
 ?>
 <style type="text/css">
   .datepicker{
@@ -62,10 +72,7 @@ if($this->session->userdata('admin_role')=='superadmin'){
                 <label for="LanJasId" class="col-sm-2 control-label">Nama Layanan</label>
                 <div class="col-sm-9">
                   <select name="LanJasId" class="form-control">
-                    <option value="">Pilih Layanan</option>
-                    <?php foreach($all_lanjas  as $row){?>
-                    <option value="<?=$row->lanjasidpermohonan;?>" <?=$lanjasid==$row->lanjasidpermohonan?'selected':'';?>><?=$row->lanjasketlay;?></option>
-                    <?php }?>
+                    <option value="<?=$lanjas['lanjasidpermohonan'];?>" <?=$lanjasid==$lanjas['lanjasidpermohonan']?'selected':'';?>><?=$layanan_lab[0]['daflaynama'];?></option>
                   </select>
                 </div>
               </div>
@@ -74,9 +81,10 @@ if($this->session->userdata('admin_role')=='superadmin'){
                 <div class="col-sm-9">
                   <select name="SarId" class="form-control">
                     <option value="">Pilih Sarpras</option>
-                    <?php foreach($sar as $row){?>
-                    <option value="<?=$row->sarid;?>"><?=$row->sarnama;?></option>
-                    <?php } ?>
+                    <?php foreach($sar as $row){
+                      if($row['sarjenis']=='Alat'){ ?>
+                    <option value="<?=$row['sarid'];?>"><?=$row['sarnama'];?></option>
+                    <?php } } ?>
                   </select>
                 </div>
               </div>

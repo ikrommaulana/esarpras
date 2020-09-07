@@ -1,4 +1,10 @@
-
+<?php
+$this->load->library('session');
+$myphoto = ($this->session->userdata('myphoto'))?'uploads/images/personil/'.$this->session->userdata('myphoto'):'public/dist/img/user2-160x160.jpg';
+$admin_role = ($this->session->userdata('admin_role'))?$this->session->userdata('admin_role'):'Admin Role not set';
+$nama_priviledge = ($this->session->userdata('nama_priviledge'))?$this->session->userdata('nama_priviledge'):'Priviledge not set';
+$labnamasingkat = ($this->session->userdata('labnamasingkat'))?$this->session->userdata('labnamasingkat'):'Laboratorium not set';
+?>
 
   <header class="main-header">
     <!-- Logo -->
@@ -19,32 +25,28 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="<?= base_url() ?>public/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-              <span class="hidden-xs"><?= ucwords($this->session->userdata('username')); ?></span>
+              <!--img src="<?= base_url().$myphoto; ?>" class="user-image" alt="User Image"-->
+              <span class="hidden-xs"><?= $this->session->userdata('username'); ?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="<?= base_url() ?>public/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="<?= base_url().$myphoto ?>" class="img-circle" alt="User Image">
 
                 <p>
-                  Administrator
+                  <?= $admin_role; ?>
+                <br/>
+                  <span style="font-weight:bold;"><?= $nama_priviledge; ?></span>
                 </p>
               </li>
               <!-- Menu Body -->
-              <!--li class="user-body">
+              <li class="user-body">
                 <div class="row">
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Followers</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Sales</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Friends</a>
+                  <div class="col-xs-12 text-center">
+                    <a href="#" title="<?= $this->session->userdata('labnama'); ?>"><i class="fa fa-flask" aria-hidden="true"></i> <?=$labnamasingkat;?></a>
                   </div>
                 </div>
-              </li-->
+              </li>
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-right">

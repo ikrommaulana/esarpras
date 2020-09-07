@@ -30,8 +30,8 @@
 			if($this->input->post('submit')){
 				$this->form_validation->set_rules('LanJasId', 'Layanan', 'trim|required');
 				$this->form_validation->set_rules('SarId', 'Sarpras', 'trim|required');
-				$this->form_validation->set_rules('PrtTglMul', 'Tanggal Mulai', 'trim|required');
-				$this->form_validation->set_rules('PrtTglSel', 'Tanggal Selesai', 'trim|required');
+				$this->form_validation->set_rules('PrtTglMul', 'Tanggal Mulai', 'trim|required|callback_datetime_exists');
+				$this->form_validation->set_rules('PrtTglSel', 'Tanggal Selesai', 'trim|required|callback_datetime_exists');
 				$this->form_validation->set_rules('PrtJamMul', 'Jam Mulai', 'trim|required');
 				$this->form_validation->set_rules('PrtJamSel', 'Jam Selesai', 'trim|required');
 				if ($this->form_validation->run() == FALSE) {
@@ -88,8 +88,8 @@
 			if($this->input->post('submit')){
 				$this->form_validation->set_rules('LanJasId', 'Layanan', 'trim|required');
 				$this->form_validation->set_rules('SarId', 'Sarpras', 'trim|required');
-				$this->form_validation->set_rules('PrtTglMul', 'Tanggal Mulai', 'trim|required');
-				$this->form_validation->set_rules('PrtTglSel', 'Tanggal Selesai', 'trim|required');
+				$this->form_validation->set_rules('PrtTglMul', 'Tanggal Mulai', 'trim|required|callback_datetime_exists');
+				$this->form_validation->set_rules('PrtTglSel', 'Tanggal Selesai', 'trim|required|callback_datetime_exists');
 				$this->form_validation->set_rules('PrtJamMul', 'Jam Mulai', 'trim|required');
 				$this->form_validation->set_rules('PrtJamSel', 'Jam Selesai', 'trim|required');
 
@@ -141,6 +141,44 @@
 			
 			redirect(base_url('admin/layanan_lab_eks/edit/'.$lanjasid));
 		}
+
+		public function date_penggunaan_peralatan($date1,$date2,$time1,$time2,$sarid)
+        {
+        	//$sarid = 2;
+        	$query = $this->db->query('SELECT * FROM tb_penggunaan_peralatan WHERE (sarid='.$sarid.' AND prttglmul >= "'.$date1.'" AND prttglmul <= "'.$date2.'") OR (sarid='.$sarid.' AND prttglsel >= "'.$date1.'" AND prttglsel <= "'.$date2.'")')->result();
+			if($query){
+          		foreach($query as $row){
+          			$prtid = $row->prtid;
+          			$jam1 = $row->prtjammul;
+          			$jam2 = $row->prtjamsel;
+          			$cekjam = 'SELECT * FROM tb_penggunaan_peralatan WHERE (sarid="'.$sarid.'" AND prtjammul >= "'.$time1.'" AND prtjammul <= "'.$time2.'") OR (sarid="'.$sarid.'" AND prtjamsel >= "'.$time1.'" AND prtjamsel <= "'.$time2.'")';
+          			$query2 = $this->db->query($cekjam)->result();
+          			if($query2){
+          				$valid = 'exist';
+          			}else{
+          				$valid = 'available';
+          			}
+          		}	
+          	}else{
+      			$valid = 'available';
+            }
+            return $valid;
+        }
+
+        public function datetime_exists()
+        {
+        	$date1 = date('Y-m-d',strtotime($this->input->post('PrtTglMul')));
+        	$date2 = date('Y-m-d',strtotime($this->input->post('PrtTglSel')));
+        	$time1 = date('H:i:s',strtotime($this->input->post('PrtJamMul')));
+        	$time2 = date('H:i:s',strtotime($this->input->post('PrtJamSel')));
+        	$sarid = $this->input->post('SarId');
+        	$res = $this->date_penggunaan_peralatan($date1,$date2,$time1,$time2,$sarid);
+        	if($res=='available'){
+        		return TRUE;
+        	}else{
+        		$this->form_validation->set_message('datetime_exists', 'Sarpras tepakai ditanggal tersebut. Silahkan pilih tanggal lain.');
+        	}
+        }
 
 	}
 

@@ -60,11 +60,17 @@
 				}
 			}
 			else{
+				$priviledge = $this->session->userdata('priviledge');
+				if($priviledge==1){
+					$data['all_lab'] =  $this->master_model->get_master_where('m_lab','idlab',$idlab);
+				}else{
+					$data['all_lab'] =  $this->master_model->get_master('m_lab');
+				}
 				$data['title'] = 'Lokasi Laboratorium';
 				$data['page'] = 'lokasi_lab';
 				$data['idlab'] = $idlab;
 				$data['lab'] = $this->master_model->get_master_by_id('m_lab','idlab',$idlab);
-				$data['all_lab'] = $this->master_model->get_master('m_lab');
+				// $data['all_lab'] = $this->master_model->get_master('m_lab');
 				$data['view'] = 'admin/lokasi_lab/add';
 				$this->load->view('layout', $data);
 			}

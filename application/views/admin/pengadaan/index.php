@@ -30,7 +30,7 @@
         <tr>
           <th style=" white-space:nowrap;">No</th>
           <th style=" white-space:nowrap;">Pemohon</th>
-          <th style=" white-space:nowrap;">Laboratorium</th>
+          <th style=" white-space:nowrap;">Lab</th>
           <th style=" white-space:nowrap;">Nama Sarpras</th>          <th style=" white-space:nowrap;">Waktu</th>
           <th style=" white-space:nowrap;">Respon L1</th>
           <th style=" white-space:nowrap;">Respon L2</th>
@@ -47,7 +47,8 @@
             $pegstatus = (($get_admin_personil[0]->pegstatus)==1)? '' : '<span class="label label-danger">Personil is not active</span>';
 
             if($pegnip){
-              $get_lab = $this->db->query("SELECT tb_personil_daftar.* ,m_lab.labnama,m_lab.is_active FROM tb_personil_daftar LEFT JOIN m_lab ON tb_personil_daftar.idlab=m_lab.idlab WHERE tb_personil_daftar.pegnip=".$pegnip)->result();
+              $get_lab = $this->db->query("SELECT tb_personil_daftar.* ,m_lab.labnamasingkat,m_lab.labnama,m_lab.is_active FROM tb_personil_daftar LEFT JOIN m_lab ON tb_personil_daftar.idlab=m_lab.idlab WHERE tb_personil_daftar.pegnip=".$pegnip)->result();
+              $labnamasingkat = (isset($get_lab[0]->labnamasingkat))? $get_lab[0]->labnamasingkat : set_value('labnamasingkat');
               $labnama = (isset($get_lab[0]->labnama))? $get_lab[0]->labnama : set_value('labnama');
               $labstatus = (($get_lab[0]->is_active)==1)? '' : '<span class="label label-danger">Lab is not active</span>';
             }else{
@@ -79,7 +80,7 @@
           <tr>
             <td style=" white-space:nowrap;"><?= ++$i; ?></td>
             <td style=" white-space:nowrap;"><?= $pegnama.' '.$pegstatus; ?></td>
-            <td style=" white-space:nowrap;"><?= $labnama.' '.$labstatus; ?></td>
+            <td style=" white-space:nowrap;" title="<?=$labnama;?>"><?= $labnamasingkat.' '.$labstatus; ?></td>
             <td style=" white-space:nowrap;"><?= $row['pengsarnama']; ?></td>
             <td style=" white-space:nowrap;"><?=date("d-m-Y", strtotime($row['loklabwak']));?></td>
             <td style=" white-space:nowrap;"><?= $respon1; ?></td>

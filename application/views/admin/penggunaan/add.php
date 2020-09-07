@@ -2,7 +2,7 @@
 $mitra = $this->master_model->get_master('m_mitra');
 
 if($this->session->userdata('admin_role')=='superadmin'){
-  $lay = $this->master_model->get_master('tb_layanan_lab');
+  $lay = $this->master_model->get_simple_master('tb_layanan_lab');
 }else{
   $get_personil = $this->db->query('select * from m_personil
           where admin_id='.$this->session->userdata('admin_id'))->result();

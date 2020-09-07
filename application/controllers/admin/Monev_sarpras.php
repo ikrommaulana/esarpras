@@ -11,7 +11,22 @@
 		}
 
 		function index(){
-			$data['all_data'] =  $this->master_model->get_all_simple_master('tb_monev_sarpras');
+			if($this->session->userdata('admin_role')=='superadmin'){
+			$data['all_data'] =  $this->master_model->get_simple_monev();
+			}else{
+				$get_admin = $this->db->query('select * from ci_admin
+					where admin_id='.$this->session->userdata('admin_id'))->result();
+				$priviledge = (isset($get_admin[0]->priviledge))? $get_admin[0]->priviledge : set_value('priviledge');
+				if($priviledge==3){
+					$data['all_data'] =  $this->master_model->get_simple_monev();
+				}else{
+					$pegnip = (isset($get_admin[0]->pegnip))? $get_admin[0]->pegnip : set_value('pegnip');
+					$get_lab = $this->db->query('select * from tb_personil_daftar
+						where pegnip="'.$pegnip.'"')->result();
+					$idlab = (isset($get_lab[0]->idlab))? $get_lab[0]->idlab : set_value('idlab');
+					$data['all_data'] =  $this->master_model->get_all_monev_by_lab($idlab);
+				}
+			}
 			$data['title'] = 'Monev Sarpras';
 			$data['page'] = 'monev_sarpras';
 			$data['view'] = 'admin/monev_sarpras/list';
@@ -30,8 +45,8 @@
 				$this->form_validation->set_rules('SarId', 'Sarpras', 'trim|required');
 				$this->form_validation->set_rules('MonevSifat', 'Sifat', 'trim|required');
 				$this->form_validation->set_rules('MonevPelak', 'Pelaksana', 'trim|required');
-				$this->form_validation->set_rules('MonevTglMul', 'Tanggal Mulai', 'trim|required');
-				$this->form_validation->set_rules('MonevTglSel', 'Tanggal Selesai', 'trim|required');
+				$this->form_validation->set_rules('MonevTglMul', 'Tanggal Mulai', 'trim|required|callback_datetime_exists');
+				$this->form_validation->set_rules('MonevTglSel', 'Tanggal Selesai', 'trim|required|callback_datetime_exists');
 				$this->form_validation->set_rules('PegNIP', 'Pegawai', 'trim|required');
 				$this->form_validation->set_rules('MonevStatus', 'Status', 'trim|required');
 				if ($this->form_validation->run() == FALSE) {
@@ -84,8 +99,8 @@
 				$this->form_validation->set_rules('SarId', 'Sarpras', 'trim|required');
 				$this->form_validation->set_rules('MonevSifat', 'Sifat', 'trim|required');
 				$this->form_validation->set_rules('MonevPelak', 'Pelaksana', 'trim|required');
-				$this->form_validation->set_rules('MonevTglMul', 'Tanggal Mulai', 'trim|required');
-				$this->form_validation->set_rules('MonevTglSel', 'Tanggal Selesai', 'trim|required');
+				$this->form_validation->set_rules('MonevTglMul', 'Tanggal Mulai', 'trim|required|callback_datetime_exists');
+				$this->form_validation->set_rules('MonevTglSel', 'Tanggal Selesai', 'trim|required|callback_datetime_exists');
 				$this->form_validation->set_rules('PegNIP', 'Pegawai', 'trim|required');
 				$this->form_validation->set_rules('MonevStatus', 'Status', 'trim|required');
 
@@ -93,6 +108,7 @@
 					$data['title'] = 'Monev Sarpras';
 					$data['page'] = 'monev_sarpras';
 					$data['view'] = 'admin/monev_sarpras/edit';
+					$data['data'] = $this->master_model->get_master_by_id('tb_monev_sarpras','id_monev',$id);
 					$this->load->view('layout', $data);
 				}else{
 					$data = array(
@@ -179,6 +195,60 @@
 			}
 		    return $image;
 		}
+
+		public function date_monev_sarpras($date1,$date2,$sarid)
+        {
+        	//$sarid = 2;
+        	$query = $this->db->query('SELECT * FROM tb_monev_sarpras WHERE (sarid='.$sarid.' AND monevtglmul >= "'.$date1.'" AND monevtglmul <= "'.$date2.'") OR (sarid='.$sarid.' AND monevtglsel >= "'.$date1.'" AND monevtglsel <= "'.$date2.'")')->result();
+			if($query){
+      			$valid = 'exist';
+          	}else{
+      			$valid = $this->date_jadwal_pemeliharaan($date1,$date2,$sarid);
+            }
+            return $valid;
+        }
+
+		public function date_jadwal_pemeliharaan($date1,$date2,$sarid)
+        {
+        	//$sarid = 2;
+        	$query = $this->db->query('SELECT * FROM tb_jadwal_pemeliharaan WHERE (sarid='.$sarid.' AND jadpemtglmul >= "'.$date1.'" AND jadpemtglmul <= "'.$date2.'") OR (sarid='.$sarid.' AND jadpemtglsel >= "'.$date1.'" AND jadpemtglsel <= "'.$date2.'")')->result();
+			if($query){
+      			$valid = 'exist';
+          	}else{
+      			$valid = $this->date_jadwal_penggunaan($date1,$date2,$sarid);
+            }
+            return $valid;
+        }
+
+		public function date_jadwal_penggunaan($date1,$date2,$sarid)
+        {
+        	$query = $this->db->query('SELECT * FROM tb_penggunaan_ruangan WHERE (sarid='.$sarid.' AND rgntglmul >= "'.$date1.'" AND rgntglmul <= "'.$date2.'") OR (sarid='.$sarid.' AND rgntglsel >= "'.$date1.'" AND rgntglsel <= "'.$date2.'")')->result();
+			if($query){
+      			$valid = 'exist';
+          	}else{
+      			$query2 = $this->db->query('SELECT * FROM tb_penggunaan_peralatan WHERE (sarid='.$sarid.' AND prttglmul >= "'.$date1.'" AND prttglmul <= "'.$date2.'") OR (sarid='.$sarid.' AND prttglsel >= "'.$date1.'" AND prttglsel <= "'.$date2.'")')->result();
+      			if($query2){
+      				$valid = 'exist';
+      			}else{
+      				$valid = 'available';
+      			}
+            }
+            return $valid;
+        }
+
+        public function datetime_exists()
+        {
+        	$date1 = date('Y-m-d',strtotime($this->input->post('MonevTglMul')));
+        	$date2 = date('Y-m-d',strtotime($this->input->post('MonevTglSel')));
+        	$sarid = $this->input->post('SarId');
+        	$res = $this->date_monev_sarpras($date1,$date2,$sarid);
+        	if($res=='available'){
+        		return TRUE;
+        	}else{
+        		$this->form_validation->set_message('datetime_exists', 'Sarpras tepakai ditanggal tersebut. Silahkan pilih tanggal lain.');
+          		return FALSE;
+        	}
+        }
 
 	}
 

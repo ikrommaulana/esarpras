@@ -6,6 +6,7 @@
           <h4><i class="fa fa-pencil"></i> &nbsp; Update Admin</h4>
         </div>
         <div class="col-md-6 text-right">
+          <a href="<?= base_url('admin/personil'); ?>" class="btn btn-success"><i class="fa fa-list"></i> Update Profile Data</a>
           <a href="<?= base_url('admin/profile/change_pwd'); ?>" class="btn btn-success"><i class="fa fa-list"></i> Change Password</a>
         </div>
         
@@ -60,7 +61,7 @@
               </div>
               <div class="form-group">
                 <div class="col-md-11">
-                  <input type="submit" name="submit" value="Update Profile" class="btn btn-info pull-right">
+                  <input type="submit" name="submit" value="Update Admin" class="btn btn-info pull-right">
                 </div>
               </div>
             <?php echo form_close(); ?>

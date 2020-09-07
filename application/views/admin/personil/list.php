@@ -64,10 +64,14 @@
               type='checkbox' <?php echo ($row['pegstatus']==1)? "checked" : ""; ?> />
               <label class='tgl-btn' for='cb_<?=$row['id_personil']?>'></label>
             </td>
-            <td class="text-center"><?php echo '<a title="Edit" class="update btn btn-sm btn-warning" href="'.base_url('admin/personil/edit/'.$row['id_personil']).'"> <i class="fa fa-pencil-square-o"></i></a>
-            <a title="View" class="btn btn-sm btn-success" href="'.base_url('admin/personil/view/'.$row['id_personil']).'"> <i class="fa fa-eye"></i></a>';
+            <td class="text-center"><?php echo '<a title="View" class="btn btn-sm btn-success" href="'.base_url('admin/personil/view/'.$row['id_personil']).'"> <i class="fa fa-eye"></i></a>&nbsp;';
+              if($this->rbac->check_operation_permission('edit')):
+                   echo '<a title="Edit" class="update btn btn-sm btn-warning" href="'.base_url('admin/personil/edit/'.$row['id_personil']).'"> <i class="fa fa-pencil-square-o"></i></a>&nbsp;';
+              elseif($this->session->userdata('pegnip')==$row['pegnip']):
+                 echo '<a title="Edit" class="update btn btn-sm btn-warning" href="'.base_url('admin/personil/edit/'.$row['id_personil']).'"> <i class="fa fa-pencil-square-o"></i></a>&nbsp;' ;
+              endif;
               if($this->rbac->check_operation_permission('delete')):
-                   '<a title="Delete" class="delete btn btn-sm btn-danger" data-href="'.base_url('admin/personil/delete/'.$row['id_personil']).'" data-toggle="modal" data-target="#confirm-delete"> <i class="fa fa-trash-o"></i></a>' ;
+                   echo '<a title="Delete" class="delete btn btn-sm btn-danger" data-href="'.base_url('admin/personil/delete/'.$row['id_personil']).'" data-toggle="modal" data-target="#confirm-delete"> <i class="fa fa-trash-o"></i></a>' ;
               endif;
                    ?>
 

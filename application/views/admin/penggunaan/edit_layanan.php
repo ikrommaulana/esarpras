@@ -173,7 +173,7 @@ $hasil = $this->db->query('select * from tb_hasil_penelitian where lanjasid="'.$
                           ?>
                           <tr>
                             <td><?= ++$i; ?></td>
-                            <td><?= $lanjasketlay; ?></td>
+                            <td><?= $layanan_lab[0]['daflaynama']; ?></td>
                             <td><?= $sarnama; ?></td>
                             <td><?=$row['rgnpemesan'];?></td>
                             <td><?=$row['rgnkegiatan'];?></td>

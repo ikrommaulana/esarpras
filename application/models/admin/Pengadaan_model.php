@@ -74,7 +74,7 @@
 				// 	LEFT JOIN tb_lokasi_lab as d ON (b.idlab = d.idlab)
 				// 	LEFT JOIN m_personil as e ON (a.pegnip = e.pegnip)
 				// 	".$where." ORDER BY created_date DESC";
-			$sql = "SELECT * FROM tb_pengadaan ORDER BY created_date DESC";
+			$sql = "SELECT * FROM tb_pengadaan a LEFT JOIN tb_lokasi_lab b ON a.loklabid=b.loklabid LEFT JOIN m_lab c ON b.idlab=c.idlab WHERE c.idlab!='' ORDER BY created_date DESC";
 			$query = $this->db->query($sql)->result_array();
 			return $query;
 		}

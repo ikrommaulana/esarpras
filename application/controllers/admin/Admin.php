@@ -147,7 +147,7 @@ class Admin extends CI_Controller
 				$result2 = $this->master_model->edit_master('m_personil','id_personil',$data2, $id2);
 				
 				if($result){
-					$this->session->set_flashdata('msg', 'Edit Record has been Disabled in Demo!');
+					$this->session->set_flashdata('msg', 'User has been updated successfully');
 					redirect(base_url('admin/admin'));
 				}
 			}

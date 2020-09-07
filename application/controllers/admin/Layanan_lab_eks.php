@@ -14,7 +14,7 @@
 			if($this->session->userdata('admin_role')=='superadmin'){
 				$data['all_data'] =  $this->master_model->get_all_simple_master('tb_layanan_lab_eks');
 			}else{
-				$get_personil = $this->db->query('select * from m_personil
+				$get_personil = $this->db->query('select * from ci_admin
 					where admin_id='.$this->session->userdata('admin_id'))->result();
 				$priviledge = (isset($get_personil[0]->priviledge))? $get_personil[0]->priviledge : set_value('priviledge');
 				if($priviledge==3){

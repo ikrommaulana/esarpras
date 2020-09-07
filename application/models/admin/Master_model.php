@@ -12,6 +12,17 @@
 		}
 
 		//---------------------------------------------------
+		public function get_master_where($table,$where='',$param=''){
+			$query = $this->db->get_where($table, array($where=>$param));
+			return $result = $query->result();
+		}
+
+		public function get_simple_master($table){
+			$query = $this->db->get($table);
+			return $result = $query->result_array();
+		}
+
+		//---------------------------------------------------
 		// get all master records for simple datatable example
 		public function get_all_simple_master($table){
 
@@ -127,6 +138,32 @@
 			//echo $sql;
 			$query = $this->db->query($sql)->result_array();
 			return $query;
+		}
+
+		function get_all_pemeliharaan_by_lab($idlab) {
+			$where = "WHERE b.idlab='".$idlab."' ";
+			$sql = "SELECT a.*,a.created_by as created_by FROM tb_jadwal_pemeliharaan a inner join tb_sarpras_lab b on a.sarid=b.sarid ".$where." ORDER BY a.created_at DESC";
+			//echo $sql;
+			$query = $this->db->query($sql)->result_array();
+			return $query;
+		}
+
+		function get_all_monev_by_lab($idlab) {
+			$where = "WHERE b.idlab='".$idlab."' ";
+			$sql = "SELECT a.*,a.created_by as created_by FROM tb_monev_sarpras a inner join tb_sarpras_lab b on a.sarid=b.sarid ".$where." ORDER BY a.created_at DESC";
+			//echo $sql;
+			$query = $this->db->query($sql)->result_array();
+			return $query;
+		}
+
+		public function get_simple_monev(){
+			$query = $this->db->query('SELECT * FROM tb_monev_sarpras a LEFT JOIN tb_sarpras_lab b ON a.sarid=b.sarid LEFT JOIN m_lab c ON b.idlab=c.idlab WHERE c.idlab!=""');
+			return $result = $query->result_array();
+		}
+
+		public function get_simple_jadpem(){
+			$query = $this->db->query('SELECT * FROM tb_jadwal_pemeliharaan a LEFT JOIN tb_sarpras_lab b ON a.sarid=b.sarid LEFT JOIN m_lab c ON b.idlab=c.idlab WHERE c.idlab!=""');
+			return $result = $query->result_array();
 		}
 
 

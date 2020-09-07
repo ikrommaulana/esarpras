@@ -56,9 +56,9 @@
               <label class='tgl-btn' for='cb_<?=$row['idlab']?>'></label>
             </td>
             <td class="text-center"><?php echo '<a title="Edit" class="update btn btn-sm btn-warning" href="'.base_url('admin/identitas_lab/edit/'.$row['idlab']).'"> <i class="fa fa-pencil-square-o"></i></a>
-            <a title="View" class="delete btn btn-sm btn-success" href="'.base_url('admin/identitas_lab/view/'.$row['idlab']).'" > <i class="fa fa-eye"></i></a>';
+            <a title="View" class="delete btn btn-sm btn-success" href="'.base_url('admin/identitas_lab/view/'.$row['idlab']).'" > <i class="fa fa-eye"></i></a>&nbsp;';
               if($this->rbac->check_operation_permission('delete')):
-                   '<a title="Delete" class="delete btn btn-sm btn-danger" data-href="'.base_url('admin/identitas_lab/delete/'.$row['idlab']).'" data-toggle="modal" data-target="#confirm-delete"> <i class="fa fa-trash-o"></i></a>';
+                   echo '<a title="Delete" class="delete btn btn-sm btn-danger" data-href="'.base_url('admin/identitas_lab/delete/'.$row['idlab']).'" data-toggle="modal" data-target="#confirm-delete"> <i class="fa fa-trash-o"></i></a>';
               endif;
               ?>
 

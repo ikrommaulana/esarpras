@@ -1,6 +1,5 @@
  <!-- Datatable style -->
-<link rel="stylesheet" href="<?= base_url() ?>public/plugins/datatables/dataTables.bootstrap.css">  
-
+<link rel="stylesheet" href="<?= base_url() ?>public/plugins/datatables/dataTables.bootstrap.css">
  <section class="content">
   <div class="row">
     <div class="col-md-12">
@@ -28,6 +27,7 @@
         <thead>
         <tr>
           <th>#ID</th>
+          <?= ($this->session->userdata('priviledge')==3)?'<th>Lab</th>':set_value('laboratorium');?>
           <th>Layanan</th>
           <th>Keterangan</th>
           <th>Pemohon</th>
@@ -43,9 +43,12 @@
         <tbody>
           <?php $i=0; foreach($all_data as $row): 
           $daflaynama = $this->db->query('SELECT * FROM tb_layanan_lab WHERE daflayid="'.$row['daflayid'].'"')->result()[0]->daflaynama;
+          $idlab = $this->db->query('SELECT * FROM tb_layanan_lab WHERE daflayid="'.$row['daflayid'].'"')->result()[0]->idlab;
+          $namalab = $this->db->query('SELECT * FROM m_lab WHERE idlab="'.$idlab.'"')->result()[0]->labnamasingkat;
           ?>
           <tr>
             <td><?= ++$i; ?></td>
+            <?= ($this->session->userdata('priviledge')==3)?'<td>'.$namalab.'</td>':set_value('laboratorium');?>
             <td><?= $daflaynama; ?></td>
             <td><?= $row['lanjasketlay']; ?></td>
             <td><?= $row['lanjaspemohon']; ?></td>

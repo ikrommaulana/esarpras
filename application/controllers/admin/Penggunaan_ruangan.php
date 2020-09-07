@@ -30,8 +30,8 @@
 			if($this->input->post('submit')){
 				$this->form_validation->set_rules('LanJasId', 'Layanan', 'trim|required');
 				$this->form_validation->set_rules('SarId', 'Sarpras', 'trim|required');
-				$this->form_validation->set_rules('RgnTglMul', 'Tanggal Mulai', 'trim|required');
-				$this->form_validation->set_rules('RgnTglSel', 'Tanggal Selesai', 'trim|required');
+				$this->form_validation->set_rules('RgnTglMul', 'Tanggal Mulai', 'trim|required|callback_datetime_exists');
+				$this->form_validation->set_rules('RgnTglSel', 'Tanggal Selesai', 'trim|required|callback_datetime_exists');
 				$this->form_validation->set_rules('RgnJamMul', 'Jam Mulai', 'trim|required');
 				$this->form_validation->set_rules('RgnJamSel', 'Jam Selesai', 'trim|required');
 				if ($this->form_validation->run() == FALSE) {
@@ -52,7 +52,7 @@
 						'rgntglmul' => date('Y-m-d',strtotime($this->input->post('RgnTglMul'))),
 						'rgntglsel' => date('Y-m-d',strtotime($this->input->post('RgnTglSel'))),
 						'rgnjammul' => date('H:i',strtotime($this->input->post('RgnJamMul'))),
-						'rgnjamsel' => date('H:i',strtotime($this->input->post('RgnJamMul'))),
+						'rgnjamsel' => date('H:i',strtotime($this->input->post('RgnJamSel'))),
 						'rgnpmkint' => $this->input->post('RgnPmkInt'),
 						'rgnpmkekt' => $this->input->post('RgnPmkEkt'),
 						'rgncatatan' => $this->input->post('RgnCatatan'),
@@ -88,8 +88,8 @@
 			if($this->input->post('submit')){
 				$this->form_validation->set_rules('LanJasId', 'Layanan', 'trim|required');
 				$this->form_validation->set_rules('SarId', 'Sarpras', 'trim|required');
-				$this->form_validation->set_rules('RgnTglMul', 'Tanggal Mulai', 'trim|required');
-				$this->form_validation->set_rules('RgnTglSel', 'Tanggal Selesai', 'trim|required');
+				$this->form_validation->set_rules('RgnTglMul', 'Tanggal Mulai', 'trim|required|callback_datetime_exists');
+				$this->form_validation->set_rules('RgnTglSel', 'Tanggal Selesai', 'trim|required|callback_datetime_exists');
 				$this->form_validation->set_rules('RgnJamMul', 'Jam Mulai', 'trim|required');
 				$this->form_validation->set_rules('RgnJamSel', 'Jam Selesai', 'trim|required');
 
@@ -108,7 +108,7 @@
 						'rgntglmul' => date('Y-m-d',strtotime($this->input->post('RgnTglMul'))),
 						'rgntglsel' => date('Y-m-d',strtotime($this->input->post('RgnTglSel'))),
 						'rgnjammul' => date('H:i',strtotime($this->input->post('RgnJamMul'))),
-						'rgnjamsel' => date('H:i',strtotime($this->input->post('RgnJamMul'))),
+						'rgnjamsel' => date('H:i',strtotime($this->input->post('RgnJamSel'))),
 						'rgnpmkint' => $this->input->post('RgnPmkInt'),
 						'rgnpmkekt' => $this->input->post('RgnPmkEkt'),
 						'rgncatatan' => $this->input->post('RgnCatatan')
@@ -141,6 +141,71 @@
 			
 			redirect(base_url('admin/layanan_lab_eks/edit/'.$lanjasid));
 		}
+
+		public function date_penggunaan_ruangan($date1,$date2,$time1,$time2,$sarid)
+        {
+        	//$sarid = 2;
+        	$query = $this->db->query('SELECT * FROM tb_penggunaan_ruangan WHERE (sarid='.$sarid.' AND rgntglmul >= "'.$date1.'" AND rgntglmul <= "'.$date2.'") OR (sarid='.$sarid.' AND rgntglsel >= "'.$date1.'" AND rgntglsel <= "'.$date2.'")')->result();
+			if($query){
+          		foreach($query as $row){
+          			$rgnid = $row->rgnid;
+          			$jam1 = $row->rgnjammul;
+          			$jam2 = $row->rgnjamsel;
+          			$cekjam = 'SELECT * FROM tb_penggunaan_ruangan WHERE (sarid="'.$sarid.'" AND rgnjammul >= "'.$time1.'" AND rgnjammul <= "'.$time2.'") OR (sarid="'.$sarid.'" AND rgnjamsel >= "'.$time1.'" AND rgnjamsel <= "'.$time2.'")';
+          			$query2 = $this->db->query($cekjam)->result();
+          			if($query2){
+          				$valid = 'exist';
+          			}else{
+          				$valid = 'available';
+          			}
+          		}	
+          	}else{
+      			$valid = 'available';
+            }
+            return $valid;
+        }
+
+        public function datetime_exists()
+        {
+        	$date1 = date('Y-m-d',strtotime($this->input->post('RgnTglMul')));
+        	$date2 = date('Y-m-d',strtotime($this->input->post('RgnTglSel')));
+        	$time1 = date('H:i:s',strtotime($this->input->post('RgnJamMul')));
+        	$time2 = date('H:i:s',strtotime($this->input->post('RgnJamSel')));
+        	$sarid = $this->input->post('SarId');
+        	$res = $this->date_penggunaan_ruangan($date1,$date2,$time1,$time2,$sarid);
+        	if($res=='available'){
+        		return TRUE;
+        	}else{
+        		$this->form_validation->set_message('datetime_exists', 'Sarpras tepakai ditanggal tersebut. Silahkan pilih tanggal lain.');
+          		return FALSE;
+        	}
+        }
+
+		// public function datefrom_exists($date)
+  //       {
+  //       	$rgndate = date('Y-m-d',strtotime($this->input->post('RgnTglMul')));
+  //       	$sarid = $this->input->post('SarId');
+  //       	$query = $this->db->query('SELECT * FROM tb_penggunaan_ruangan WHERE sarid='.$sarid.' AND rgntglmul <= "'.$rgndate.'" AND rgntglsel >= "'.$rgndate.'"')->num_rows();
+		// 	 if($query>0){
+  //         		$this->form_validation->set_message('datefrom_exists', 'Please enter another date (Tanggal Mulai)');
+  //         		return FALSE;
+  //         	}else{
+  //     			return TRUE;
+  //           }
+  //       }
+
+		// public function dateuntil_exists($date)
+  //       {
+  //       	$rgndate = date('Y-m-d',strtotime($this->input->post('RgnTglSel')));
+  //       	$sarid = $this->input->post('SarId');
+		// 	$query = $this->db->query('SELECT * FROM tb_penggunaan_ruangan WHERE rgntglmul <= "'.$rgndate.'" AND sarid='.$sarid.' AND rgntglsel >= "'.$rgndate.'"')->num_rows();
+		// 	 if($query>0){
+  //         		$this->form_validation->set_message('dateuntil_exists', 'Please enter another date (Tanggal Selesai)');
+  //         		return FALSE;
+  //         	}else{
+  //     			return TRUE;
+  //           }
+  //       }
 
 	}
 

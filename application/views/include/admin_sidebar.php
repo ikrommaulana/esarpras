@@ -6,12 +6,41 @@ if($uri_tab!='dashboard'){
   $cur_tab = 'dashboard';
 }
 
-$get_personil = $this->db->query('select * from m_personil
+$get_admin = $this->db->query('select * from ci_admin
           where admin_id='.$this->session->userdata('admin_id'))->result();
+$priviledge = (isset($get_admin[0]->priviledge))? $get_admin[0]->priviledge : set_value('priviledge');
+if($priviledge==1){
+  $nama_priviledge = 'Staff';
+}elseif($priviledge==2){
+  $nama_priviledge = 'L1';
+}elseif($priviledge==3){
+  $nama_priviledge = 'L2';
+}else{
+  $nama_priviledge = '';
+}
+$get_personil = $this->db->query('select * from m_personil where admin_id='.$this->session->userdata('admin_id'))->result();
 $pegnip = (isset($get_personil[0]->pegnip))? $get_personil[0]->pegnip : set_value('pegnip');
-$get_lab = $this->db->query('select * from tb_personil_daftar
+$id_personil = (isset($get_personil[0]->id_personil))? $get_personil[0]->id_personil : set_value('id_personil');
+$get_personil_daftar = $this->db->query('select * from tb_personil_daftar
           where pegnip="'.$pegnip.'"')->result();
-$idlab = (isset($get_lab[0]->idlab))? $get_lab[0]->idlab : set_value('idlab');
+$idlab = (isset($get_personil_daftar[0]->idlab))? $get_personil_daftar[0]->idlab : set_value('idlab');
+$get_lab = ($idlab!='')? $this->db->query('select * from m_lab where idlab='.$idlab)->result(): set_value('get_lab');
+$labnama = (isset($get_lab[0]->labnama))? $get_lab[0]->labnama : set_value('labnama');
+$labnamasingkat = (isset($get_lab[0]->labnamasingkat))? $get_lab[0]->labnamasingkat : set_value('labnamasingkat');
+$myphoto = (isset($get_personil[0]->pegphoto))? $get_personil[0]->pegphoto : set_value('pegphoto');
+$this->load->library('session');
+$this->session->set_userdata(array(
+  'id_personil'=>$id_personil,
+  'pegnip'=>$pegnip,
+  'priviledge'=>$priviledge,
+  'nama_priviledge' => $nama_priviledge,
+  'myphoto'=>$myphoto,
+  'idlab' => $idlab,
+  'labnama' => $labnama,
+  'labnamasingkat'=>$labnamasingkat,
+));
+$myphoto = ($this->session->userdata('myphoto'))?'uploads/images/personil/'.$myphoto:'public/dist/img/user2-160x160.jpg';
+
 $ceklab = $this->db->query('SELECT * FROM tb_pengadaan a left join tb_lokasi_lab b on a.loklabid=b.loklabid WHERE b.idlab="'.$idlab.'"')->result();
 
 if($ceklab){
@@ -40,7 +69,7 @@ $notif = array(
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="<?= base_url() ?>public/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="<?=base_url().$myphoto; ?>" class="img-circle" alt="User Image" style="height:45px;">
         </div>
         <div class="pull-left info">
           <p><?= ucwords($this->session->userdata('name')); ?></p>

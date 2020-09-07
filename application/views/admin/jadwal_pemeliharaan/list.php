@@ -28,6 +28,7 @@
         <thead>
         <tr>
           <th>#ID</th>
+          <?= ($this->session->userdata('priviledge')==3)?'<th>Lab</th>':set_value('laboratorium');?>
           <th>Sarpras</th>
           <th>Sifat</th>
           <th>Mitra</th>
@@ -41,11 +42,14 @@
         <tbody>
           <?php $i=0; foreach($all_data as $row): 
           $sarprasnama = $this->db->query('SELECT * FROM tb_sarpras_lab WHERE sarid="'.$row['sarid'].'"')->result()[0]->sarnama;
+          $idlab = $this->db->query('SELECT * FROM tb_sarpras_lab WHERE sarid="'.$row['sarid'].'"')->result()[0]->idlab;
+          $namalab = $this->db->query('SELECT * FROM m_lab WHERE idlab="'.$idlab.'"')->result()[0]->labnamasingkat;
           $mitranama = $this->db->query('SELECT * FROM m_mitra WHERE mitra_id="'.$row['mitraid'].'"')->result()[0]->mitrainst;
           $pegnama = $this->db->query('SELECT * FROM m_personil WHERE pegnip="'.$row['jadpempic'].'"')->result()[0]->pegnama;
           ?>
           <tr>
             <td><?= ++$i; ?></td>
+            <?= ($this->session->userdata('priviledge')==3)?'<td>'.$namalab.'</td>':set_value('laboratorium');?>
             <td><?= $sarprasnama; ?></td>
             <td><?= $row['jadpemsifat']; ?></td>
             <td><?= $mitranama; ?></td>

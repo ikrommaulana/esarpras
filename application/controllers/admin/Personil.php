@@ -11,7 +11,13 @@
 		}
 
 		function index(){
-			$data['all_personil'] =  $this->master_model->get_all_simple_master('m_personil');
+			$admin_role = $this->session->userdata('admin_role');
+			$pegnip = $this->session->userdata('pegnip');
+			if($admin_role=='Staff'){
+				$data['all_personil'] =  $this->master_model->get_where_master('m_personil','pegnip',$pegnip);
+			}else{
+				$data['all_personil'] =  $this->master_model->get_all_simple_master('m_personil');
+			}
 			$data['title'] = 'Personil';
 			$data['view'] = 'admin/personil/list';
 			$this->load->view('layout', $data);
@@ -45,8 +51,11 @@
 						//echo $uploadphoto;
 						$data['pegphoto'] = $uploadphoto;
 					}
-					// print_r($data);
+
 					$data = $this->security->xss_clean($data);
+					// echo "<pre>";
+					// print_r($data);
+					// echo "</pre>";
 					$result = $this->master_model->add_master('m_personil',$data);
 					if($result){
 							redirect(base_url('admin/personil'));

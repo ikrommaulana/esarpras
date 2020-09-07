@@ -65,6 +65,10 @@ class Profile extends MY_Controller {
 			$this->load->view('layout', $data);
 		}
 	}
+
+	public function personil(){
+		print_r($this->session->userdata());
+	}
 }
 
 ?>	

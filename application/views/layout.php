@@ -193,10 +193,32 @@
         }
     );
 
-    //Date picker
-    $('.datepicker').datepicker({
-      autoclose: true
-    });
+	$('.datepicker').datepicker({
+	    autoclose: true,
+	    format: 'mm/dd/yyyy'
+	}); 
+
+	$('.datefrom').datepicker({
+	    autoclose: true,
+	    startView: 'months',
+  		minViewMode: 'months',
+	    format: 'yyyy-mm'
+	}).on('changeDate', function(selected){
+	        startDate = new Date(selected.date.valueOf());
+	        startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
+	        $('.dateto').datepicker('setStartDate', startDate);
+	    }); 
+
+	$('.dateto').datepicker({
+	    autoclose: true,
+	    startView: 'months',
+  		minViewMode: 'months',
+	    format: 'yyyy-mm'
+	}).on('changeDate', function(selected){
+	        FromEndDate = new Date(selected.date.valueOf());
+	        FromEndDate.setDate(FromEndDate.getDate(new Date(selected.date.valueOf())));
+	        $('.datefrom').datepicker('setEndDate', FromEndDate);
+	    });
 
     //iCheck for checkbox and radio inputs
     $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({

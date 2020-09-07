@@ -13,13 +13,13 @@
 			if($this->session->userdata('admin_role')=='superadmin'){
 				$data['pengadaan'] =  $this->model->get_all_pengadaan();
 			}else{
-				$get_personil = $this->db->query('select * from m_personil
+				$get_admin = $this->db->query('select * from ci_admin
 					where admin_id='.$this->session->userdata('admin_id'))->result();
-				$priviledge = (isset($get_personil[0]->priviledge))? $get_personil[0]->priviledge : set_value('priviledge');
+				$priviledge = (isset($get_admin[0]->priviledge))? $get_admin[0]->priviledge : set_value('priviledge');
 				if($priviledge==3){
 					$data['pengadaan'] =  $this->model->get_all_pengadaan();
 				}else{
-					$pegnip = (isset($get_personil[0]->pegnip))? $get_personil[0]->pegnip : set_value('pegnip');
+					$pegnip = (isset($get_admin[0]->pegnip))? $get_admin[0]->pegnip : set_value('pegnip');
 					$get_lab = $this->db->query('select * from tb_personil_daftar
 						where pegnip="'.$pegnip.'"')->result();
 					$idlab = (isset($get_lab[0]->idlab))? $get_lab[0]->idlab : set_value('idlab');

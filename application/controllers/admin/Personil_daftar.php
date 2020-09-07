@@ -48,11 +48,16 @@
 					}
 				}
 			}
-			else{
+			else{$priviledge = $this->session->userdata('priviledge');
+				if($priviledge==1){
+					$data['all_lab'] =  $this->master_model->get_master_where('m_lab','idlab',$idlab);
+				}else{
+					$data['all_lab'] =  $this->master_model->get_master('m_lab');
+				}
 				$data['page'] = 'personil_daftar';
 				$data['idlab'] = $idlab;
 				$data['lab'] = $this->master_model->get_master_by_id('m_lab','idlab',$idlab);
-				$data['all_lab'] = $this->master_model->get_master('m_lab');
+				// $data['all_lab'] = $this->master_model->get_master('m_lab');
 				$data['view'] = 'admin/personil_daftar/add';
 				$this->load->view('layout', $data);
 			}

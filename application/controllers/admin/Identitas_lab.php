@@ -11,7 +11,14 @@
 		}
 
 		function index(){
-			$data['all_lab'] =  $this->master_model->get_all_simple_master('m_lab');
+			// print_r($this->session->userdata());
+			$admin_role = $this->session->userdata('admin_role');
+			$idlab = $this->session->userdata('idlab');
+			if($admin_role=='Admin Balai'){
+				$data['all_lab'] =  $this->master_model->get_where_master('m_lab','idlab',$idlab);
+			}else{
+				$data['all_lab'] =  $this->master_model->get_all_simple_master('m_lab');
+			}
 			$data['title'] = 'Identitas Laboratorium';
 			$data['view'] = 'admin/identitas_lab/list';
 			$this->load->view('layout', $data);

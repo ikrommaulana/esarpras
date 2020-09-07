@@ -4,7 +4,12 @@ $lanjas = $this->master_model->get_master_by_id('tb_layanan_lab_eks','lanjasidpe
 $lay = $this->master_model->get_master('tb_layanan_lab_eks');
 $peg = $this->master_model->get_master('m_personil');
 $pend = $this->master_model->get_master('tb_personil_pendidikan');
-$tra = $this->master_model->get_master('tb_personil_training');
+//$tra = $this->master_model->get_master('tb_personil_training');
+$tra = $this->db->query('select tranmtraining from tb_personil_training group by tranmtraining order by tranmtraining asc')->result();
+$lanjas = $this->master_model->get_master_by_id('tb_layanan_lab_eks','lanjasidpermohonan',$lanjasid);
+$daflayid = (isset($lanjas['daflayid']))? $lanjas['daflayid'] : set_value('daflayid');
+$layanan_lab = $this->db->query('select * from tb_layanan_lab where daflayid="'.$daflayid.'"')->result_array();
+$idlab = (isset($layanan_lab[0]['idlab']))? $layanan_lab[0]['idlab'] : set_value('idlab');
 ?>
 <style type="text/css">
   .datepicker{
@@ -47,7 +52,7 @@ $tra = $this->master_model->get_master('tb_personil_training');
                 <label for="LanJasId" class="col-sm-2 control-label">Nama Layanan</label>
                 <div class="col-sm-9">
                   <select name="LanJasId" class="form-control">
-                    <option value="<?=$lanjas['lanjasidpermohonan'];?>" ><?=$lanjas['lanjasketlay'];?></option>
+                    <option value="<?=$lanjas['lanjasidpermohonan'];?>" ><?=$layanan_lab[0]['daflaynama'];?></option>
                   </select>
                 </div>
               </div>
